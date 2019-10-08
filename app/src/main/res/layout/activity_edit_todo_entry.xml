@@ -13,6 +13,11 @@
         android:layout_width="80dp"
         android:layout_height="wrap_content"
         />
+    <EditText
+        android:id="@+id/editDescEditText"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        />
     <Button
         android:onClick="updateTodo"
         android:layout_width="wrap_content"

@@ -16,9 +16,13 @@ public class TodoEntity {
     @ColumnInfo(name = "todo")
     private String mTodo;
 
-    public TodoEntity(String id, String todo) {
+    @ColumnInfo(name = "desc")
+    private String description;
+
+    public TodoEntity(String id, String todo, String description) {
         this.id = id;
         this.mTodo = todo;
+        this.description = description;
     }
 
     @NonNull
@@ -30,5 +34,7 @@ public class TodoEntity {
     public String getTodo() {
         return mTodo;
     }
+
+    public String getDescription() {return description;}
 
 }

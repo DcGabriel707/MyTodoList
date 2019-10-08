@@ -2,6 +2,7 @@ package com.dcgabriel.mytodolist;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -17,7 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class MainActivity extends AppCompatActivity implements TodoListAdapter.OnDeleteClickListener {
-
+    public static final String TAG = "MainActivity";
     public static final int ADD_ENTRY_ACTIVITY_REQUEST_CODE = 1;
     public static final int EDIT_ENTRY_ACTIVITY_REQUEST_CODE = 2;
     private TodoViewModel todoViewModel;
@@ -51,15 +52,19 @@ public class MainActivity extends AppCompatActivity implements TodoListAdapter.O
         if (requestCode == ADD_ENTRY_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
 
             final String todo_id = UUID.randomUUID().toString();
-            TodoEntity todo = new TodoEntity(todo_id, data.getStringExtra(AddTodoEntry.TODO_ADDED));
+            TodoEntity todo = new TodoEntity(todo_id,
+                    data.getStringExtra(AddTodoEntry.TODO_ADDED),
+                    data.getStringExtra(AddTodoEntry.DESC_ADDED));
             todoViewModel.insert(todo);
+            Log.d(TAG, "****************************onActivityResult: " + todo.getId() + " " + todo.getTodo() + " " + todo.getDescription());
             Toast.makeText(this, "saved successfully", Toast.LENGTH_SHORT).show();
         } else if (requestCode == EDIT_ENTRY_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
-            TodoEntity todo = new TodoEntity(data.getStringExtra(EditTodoEntry.TODO_ID), data.getStringExtra(EditTodoEntry.UPDATED_TODO));
+            TodoEntity todo = new TodoEntity(data.getStringExtra(EditTodoEntry.TODO_ID),
+                    data.getStringExtra(EditTodoEntry.UPDATED_TODO),
+                    data.getStringExtra(EditTodoEntry.UPDATED_DESC));
             todoViewModel.update(todo);
             Toast.makeText(this, "updated  successfully", Toast.LENGTH_SHORT).show();
-        }
-        else {
+        } else {
             Toast.makeText(this, "save failed", Toast.LENGTH_SHORT).show();
         }
     }

@@ -3,6 +3,7 @@ package com.dcgabriel.mytodolist;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +17,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.TodoViewHolder> {
-
+    public static final String TAG = "TodoListAdapter";
     private final LayoutInflater layoutInflater;
     private Context context;
     private List<TodoEntity> todoList;
@@ -44,7 +45,8 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.TodoVi
     public void onBindViewHolder(@NonNull TodoListAdapter.TodoViewHolder holder, int position) {
         if (todoList != null) {
             TodoEntity todo = todoList.get(position);
-            holder.setData(todo.getTodo(), position);
+            Log.d(TAG, "******************************************onBindViewHolder: " + todo.getTodo() + " " + todo.getDescription());
+            holder.setData(todo.getTodo(), todo.getDescription(), position);
             holder.setListeners();
         } else {
             holder.todoEntryTextView.setText("Empty");
@@ -66,6 +68,7 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.TodoVi
 
     public class TodoViewHolder extends RecyclerView.ViewHolder {
         private TextView todoEntryTextView;
+        private TextView todoEntryDescTextView;
         private int position;
         private CardView deleteButton;
         private RelativeLayout updateEntry;
@@ -73,12 +76,14 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.TodoVi
         public TodoViewHolder(@NonNull View itemView) {
             super(itemView);
             todoEntryTextView = itemView.findViewById(R.id.todoEntryTextView);
+            todoEntryDescTextView = itemView.findViewById(R.id.todoEntryDescTextView);
             deleteButton = itemView.findViewById(R.id.todoEntryDelete);
             updateEntry  = itemView.findViewById(R.id.todoEntryRelativeLayout);
         }
 
-        public void setData(String text, int position) {
+        public void setData(String text, String desc, int position) {
             todoEntryTextView.setText(text);
+            todoEntryDescTextView.setText(desc);
             this.position = position;
         }
         public void setListeners(){
