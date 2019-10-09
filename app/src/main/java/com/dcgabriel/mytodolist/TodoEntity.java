@@ -3,6 +3,7 @@ package com.dcgabriel.mytodolist;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "todos")
@@ -19,10 +20,26 @@ public class TodoEntity {
     @ColumnInfo(name = "desc")
     private String description;
 
+    @ColumnInfo(name = "deadline_time")
+    private String time;
+
+    @ColumnInfo(name = "deadline_date")
+    private String date;
+
+
+    @Ignore
     public TodoEntity(String id, String todo, String description) {
         this.id = id;
         this.mTodo = todo;
         this.description = description;
+    }
+
+    public TodoEntity(String id, String todo, String description, String time, String date) {
+        this.id = id;
+        this.mTodo = todo;
+        this.description = description;
+        this.time = time;
+        this.date = date;
     }
 
     @NonNull
@@ -36,5 +53,13 @@ public class TodoEntity {
     }
 
     public String getDescription() {return description;}
+
+    public String getTime() {
+        return time;
+    }
+
+    public String getDate() {
+        return date;
+    }
 
 }

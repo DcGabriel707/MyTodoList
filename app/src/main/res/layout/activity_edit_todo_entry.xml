@@ -18,6 +18,35 @@
         android:layout_width="80dp"
         android:layout_height="wrap_content"
         />
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:onClick="editDate">
+
+        <TextView
+            android:id="@+id/editDateTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:text="Select date" />
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:onClick="editTime">
+
+        <TextView
+            android:id="@+id/editTimeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:text="Select time" />
+
+    </androidx.cardview.widget.CardView>
     <Button
         android:onClick="updateTodo"
         android:layout_width="wrap_content"

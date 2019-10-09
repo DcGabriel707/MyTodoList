@@ -7,8 +7,6 @@
     android:gravity="center_horizontal"
     tools:context=".AddTodoEntry">
 
-
-
     <EditText
         android:id="@+id/newDescEditText"
         android:layout_width="match_parent"

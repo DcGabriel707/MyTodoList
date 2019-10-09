@@ -1,13 +1,20 @@
 package com.dcgabriel.mytodolist;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.sql.Time;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -54,14 +61,20 @@ public class MainActivity extends AppCompatActivity implements TodoListAdapter.O
             final String todo_id = UUID.randomUUID().toString();
             TodoEntity todo = new TodoEntity(todo_id,
                     data.getStringExtra(AddTodoEntry.TODO_ADDED),
-                    data.getStringExtra(AddTodoEntry.DESC_ADDED));
+                    data.getStringExtra(AddTodoEntry.DESC_ADDED),
+                    data.getStringExtra(AddTodoEntry.TIME_ADDED),
+                    data.getStringExtra(AddTodoEntry.DATE_ADDED));
+
+            setNotification();
             todoViewModel.insert(todo);
-            Log.d(TAG, "****************************onActivityResult: " + todo.getId() + " " + todo.getTodo() + " " + todo.getDescription());
+            Log.d(TAG, "****************************onActivityResult: " + todo.getId() + " " + todo.getTodo() + " " + todo.getDescription() + " " + todo.getDate() + " " + todo.getTodo());
             Toast.makeText(this, "saved successfully", Toast.LENGTH_SHORT).show();
         } else if (requestCode == EDIT_ENTRY_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
             TodoEntity todo = new TodoEntity(data.getStringExtra(EditTodoEntry.TODO_ID),
                     data.getStringExtra(EditTodoEntry.UPDATED_TODO),
-                    data.getStringExtra(EditTodoEntry.UPDATED_DESC));
+                    data.getStringExtra(EditTodoEntry.UPDATED_DESC),
+                    data.getStringExtra(EditTodoEntry.UPDATED_TIME),
+                    data.getStringExtra(EditTodoEntry.UPDATED_DATE));
             todoViewModel.update(todo);
             Toast.makeText(this, "updated  successfully", Toast.LENGTH_SHORT).show();
         } else {
@@ -78,5 +91,18 @@ public class MainActivity extends AppCompatActivity implements TodoListAdapter.O
     @Override
     public void onDeleteClickListener(TodoEntity todo) {
         todoViewModel.delete(todo);
+    }
+
+    private void setNotification(){
+        Calendar calendar= Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY,20);
+        calendar.set(Calendar.MINUTE,28);
+
+
+
+        AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent myIntent = new Intent(MainActivity.this, AlarmReceiver.class);
+        PendingIntent pendingIntent =  PendingIntent.getBroadcast(this,0, myIntent, 0 );
+        manager.set(AlarmManager.RTC, SystemClock.elapsedRealtime()+3000, pendingIntent );
     }
 }
