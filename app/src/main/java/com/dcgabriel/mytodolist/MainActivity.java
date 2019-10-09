@@ -28,9 +28,16 @@ public class MainActivity extends AppCompatActivity implements TodoListAdapter.O
     public static final String TAG = "MainActivity";
     public static final int ADD_ENTRY_ACTIVITY_REQUEST_CODE = 1;
     public static final int EDIT_ENTRY_ACTIVITY_REQUEST_CODE = 2;
+    public static final String TODO_TITLE = "todo_title";
+    public static final String TODO_DESC = "todo_date";
+
+    private int temp = 1;
+
+
     private TodoViewModel todoViewModel;
     private RecyclerView todoRecyclerView;
     private TodoListAdapter todoListAdapter;
+
 
 
     @Override
@@ -38,6 +45,10 @@ public class MainActivity extends AppCompatActivity implements TodoListAdapter.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        handleRecyclerView();
+    }
+
+    private void handleRecyclerView() {
         todoRecyclerView = findViewById(R.id.todoRecyclerView);
         todoListAdapter = new TodoListAdapter(MainActivity.this, this);
         todoRecyclerView.setAdapter(todoListAdapter);
@@ -65,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements TodoListAdapter.O
                     data.getStringExtra(AddTodoEntry.TIME_ADDED),
                     data.getStringExtra(AddTodoEntry.DATE_ADDED));
 
-            setNotification();
+            setNotification(todo);
             todoViewModel.insert(todo);
             Log.d(TAG, "****************************onActivityResult: " + todo.getId() + " " + todo.getTodo() + " " + todo.getDescription() + " " + todo.getDate() + " " + todo.getTodo());
             Toast.makeText(this, "saved successfully", Toast.LENGTH_SHORT).show();
@@ -82,6 +93,7 @@ public class MainActivity extends AppCompatActivity implements TodoListAdapter.O
         }
     }
 
+
     public void addFAB(View view) {
         Intent intent = new Intent(MainActivity.this, AddTodoEntry.class);
         startActivityForResult(intent, ADD_ENTRY_ACTIVITY_REQUEST_CODE);
@@ -93,16 +105,13 @@ public class MainActivity extends AppCompatActivity implements TodoListAdapter.O
         todoViewModel.delete(todo);
     }
 
-    private void setNotification(){
-        Calendar calendar= Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY,20);
-        calendar.set(Calendar.MINUTE,28);
-
-
-
+    private void setNotification(TodoEntity todo){
+        Log.d(TAG, "000000000000000000000setNotification: title=" + todo.getTodo() + " description=" + todo.getDescription() );
         AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent myIntent = new Intent(MainActivity.this, AlarmReceiver.class);
-        PendingIntent pendingIntent =  PendingIntent.getBroadcast(this,0, myIntent, 0 );
-        manager.set(AlarmManager.RTC, SystemClock.elapsedRealtime()+3000, pendingIntent );
+        myIntent.putExtra(TODO_TITLE, todo.getTodo());
+        myIntent.putExtra(TODO_DESC, todo.getDescription());
+        PendingIntent pendingIntent =  PendingIntent.getBroadcast(this,0, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        manager.set(AlarmManager.RTC, Calendar.getInstance().getTimeInMillis() + 5000, pendingIntent );
     }
 }
