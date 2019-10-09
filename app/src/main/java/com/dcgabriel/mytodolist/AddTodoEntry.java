@@ -54,17 +54,20 @@ public class AddTodoEntry extends AppCompatActivity {
             String desc = newDescEditText.getText().toString();
             String time = newTimeTextView.getText().toString();
             String date = newDateTextView.getText().toString();
+
+            if (time.equals("Select time")) //todo: find more efficient way
+                time = "00:00";
+            if (date.equals("Select date")) //todo: find more efficient way
+                date = "00/00/00";
+
             resultIntent.putExtra(TODO_ADDED, todo);
             resultIntent.putExtra(DESC_ADDED, desc);
             resultIntent.putExtra(TIME_ADDED, time);
             resultIntent.putExtra(DATE_ADDED, date);
             setResult(RESULT_OK, resultIntent);
 
-
             finish();
         }
-
-
     }
 
     public void newTime(View view) {

@@ -120,9 +120,10 @@ public class MainActivity extends AppCompatActivity implements TodoListAdapter.O
         Intent myIntent = new Intent(MainActivity.this, AlarmReceiver.class);
         myIntent.putExtra(TODO_TITLE, todo.getTodo());
         myIntent.putExtra(TODO_DESC, todo.getDescription());
-        PendingIntent pendingIntent =  PendingIntent.getBroadcast(this,todo.getNotificationId(), myIntent, PendingIntent.FLAG_ONE_SHOT);
+        PendingIntent pendingIntent =  PendingIntent.getBroadcast(this,todo.getNotificationId(), myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        manager.set(AlarmManager.RTC, scheduledDateTime, pendingIntent );
+
+        manager.set(AlarmManager.RTC, scheduledDateTime+5000, pendingIntent );
 
     }
 

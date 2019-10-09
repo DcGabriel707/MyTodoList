@@ -46,7 +46,7 @@ public class EditTodoEntry extends AppCompatActivity {
         bundle = getIntent().getExtras();
         if (bundle != null) {
             todoId = bundle.getString("todo_id");
-            todoNotificationId = Integer.parseInt(bundle.getString("todo_notification_id"));
+            todoNotificationId = Integer.parseInt(bundle.getString("todo_notification_id")); //todo fix
             todoIsCompleted = Integer.parseInt(bundle.getString("todo_is_completed"));
         }
 

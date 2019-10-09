@@ -3,6 +3,7 @@ package com.dcgabriel.mytodolist;
 import android.app.Application;
 import android.os.AsyncTask;
 import android.os.SystemClock;
+import android.util.Log;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -15,6 +16,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 public class TodoViewModel extends AndroidViewModel {
+    private static final String TAG = "TodoViewModel";
     private TodoDataAccessObject todoDAO;
     private TodoDatabase todoDatabase;
     private LiveData<List<TodoEntity>> allTodos;
@@ -44,24 +46,27 @@ public class TodoViewModel extends AndroidViewModel {
         new DeleteAsyncTask(todoDAO).execute(todo);
     }
 
-    public int generateNotificationId(){
+    public int generateNotificationId() {
         int id = (int) SystemClock.uptimeMillis();
         return id;
     }
 
-    public long convertToTimeInMillisecond(String date, String time){
+    public long convertToTimeInMillisecond(String date, String time) {
         //Specifying the pattern of input date and time
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-M-yyyy hh:mm:ss");
-        String dateString = "22-03-2017 11:18:32";
-        Calendar calendar  = Calendar.getInstance();
-        try{
-            //formatting the dateString to convert it into a Date
-            Date mDate = sdf.parse(dateString);
-            calendar.setTime(mDate);
-        }catch(ParseException e){
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/d/yyyy hh:mm");
+        String dateString = date + " " + time;
+        Calendar calendar = Calendar.getInstance();
+
+        Log.d(TAG, "convertToTimeInMillisecond: " + dateString);
+        Date mDate = null;
+        try {
+            mDate = sdf.parse(dateString);
+        } catch (ParseException e) {
             e.printStackTrace();
         }
+        calendar.setTime(mDate);
 
+        Log.d(TAG, "convertToTimeInMillisecond: " + date + " " + time + calendar.getTimeInMillis());
         return calendar.getTimeInMillis();
 
     }
@@ -86,11 +91,13 @@ public class TodoViewModel extends AndroidViewModel {
         }
     }
 
-    private class UpdateAsyncTask extends  AsyncTask<TodoEntity, Void, Void> {
+    private class UpdateAsyncTask extends AsyncTask<TodoEntity, Void, Void> {
         TodoDataAccessObject todoDao;
-        public UpdateAsyncTask (TodoDataAccessObject todoDao) {
+
+        public UpdateAsyncTask(TodoDataAccessObject todoDao) {
             this.todoDao = todoDao;
         }
+
         @Override
         protected Void doInBackground(TodoEntity... todos) {
             todoDao.update(todos[0]);
