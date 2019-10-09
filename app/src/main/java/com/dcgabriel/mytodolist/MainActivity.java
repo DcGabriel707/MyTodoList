@@ -74,7 +74,9 @@ public class MainActivity extends AppCompatActivity implements TodoListAdapter.O
                     data.getStringExtra(AddTodoEntry.TODO_ADDED),
                     data.getStringExtra(AddTodoEntry.DESC_ADDED),
                     data.getStringExtra(AddTodoEntry.TIME_ADDED),
-                    data.getStringExtra(AddTodoEntry.DATE_ADDED));
+                    data.getStringExtra(AddTodoEntry.DATE_ADDED),
+                    todoViewModel.generateNotificationId(),
+                    0);
 
             setNotification(todo);
             todoViewModel.insert(todo);
@@ -85,7 +87,10 @@ public class MainActivity extends AppCompatActivity implements TodoListAdapter.O
                     data.getStringExtra(EditTodoEntry.UPDATED_TODO),
                     data.getStringExtra(EditTodoEntry.UPDATED_DESC),
                     data.getStringExtra(EditTodoEntry.UPDATED_TIME),
-                    data.getStringExtra(EditTodoEntry.UPDATED_DATE));
+                    data.getStringExtra(EditTodoEntry.UPDATED_DATE),
+                    Integer.parseInt(data.getStringExtra(EditTodoEntry.TODO_NOTIFICATION_ID)),
+                    Integer.parseInt(data.getStringExtra(EditTodoEntry.UPDATED_IS_COMPLETED))
+                    );
             todoViewModel.update(todo);
             Toast.makeText(this, "updated  successfully", Toast.LENGTH_SHORT).show();
         } else {
@@ -107,11 +112,20 @@ public class MainActivity extends AppCompatActivity implements TodoListAdapter.O
 
     private void setNotification(TodoEntity todo){
         Log.d(TAG, "000000000000000000000setNotification: title=" + todo.getTodo() + " description=" + todo.getDescription() );
+
+        long scheduledDateTime = todoViewModel.convertToTimeInMillisecond(todo.getDate(), todo.getTime());
+
         AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
         Intent myIntent = new Intent(MainActivity.this, AlarmReceiver.class);
         myIntent.putExtra(TODO_TITLE, todo.getTodo());
         myIntent.putExtra(TODO_DESC, todo.getDescription());
-        PendingIntent pendingIntent =  PendingIntent.getBroadcast(this,0, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        manager.set(AlarmManager.RTC, Calendar.getInstance().getTimeInMillis() + 5000, pendingIntent );
+        PendingIntent pendingIntent =  PendingIntent.getBroadcast(this,todo.getNotificationId(), myIntent, PendingIntent.FLAG_ONE_SHOT);
+
+        manager.set(AlarmManager.RTC, scheduledDateTime, pendingIntent );
+
     }
+
+
+
 }

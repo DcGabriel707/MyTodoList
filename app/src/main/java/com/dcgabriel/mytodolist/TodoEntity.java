@@ -17,6 +17,8 @@ public class TodoEntity {
     @ColumnInfo(name = "todo")
     private String mTodo;
 
+
+
     @ColumnInfo(name = "desc")
     private String description;
 
@@ -26,6 +28,12 @@ public class TodoEntity {
     @ColumnInfo(name = "deadline_date")
     private String date;
 
+    @NonNull
+    @ColumnInfo(name = "notification_id")
+    private int notificationId;
+
+    @ColumnInfo(name = "is_completed")
+    private int isCompleted;
 
     @Ignore
     public TodoEntity(String id, String todo, String description) {
@@ -34,12 +42,14 @@ public class TodoEntity {
         this.description = description;
     }
 
-    public TodoEntity(String id, String todo, String description, String time, String date) {
+    public TodoEntity(String id, String todo, String description, String time, String date, int notificationId, int isCompleted) {
         this.id = id;
         this.mTodo = todo;
         this.description = description;
         this.time = time;
         this.date = date;
+        this.notificationId = notificationId;
+        this.isCompleted = isCompleted;
     }
 
     @NonNull
@@ -61,5 +71,14 @@ public class TodoEntity {
     public String getDate() {
         return date;
     }
+
+    public int getNotificationId() {
+        return notificationId;
+    }
+
+    public int getIsCompleted() {
+        return isCompleted;
+    }
+
 
 }

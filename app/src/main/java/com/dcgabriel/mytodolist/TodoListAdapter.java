@@ -92,6 +92,8 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.TodoVi
                 public void onClick(View view) {
                     Intent intent = new Intent(context, EditTodoEntry.class);
                     intent.putExtra("todo_id", todoList.get(position).getId());
+                    intent.putExtra("todo_notification_id", todoList.get(position).getNotificationId());
+                    intent.putExtra("todo_is_completed", todoList.get(position).getIsCompleted());
                     ((Activity)context).startActivityForResult(intent, MainActivity.EDIT_ENTRY_ACTIVITY_REQUEST_CODE);
                 }
             });

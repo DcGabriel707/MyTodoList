@@ -1,17 +1,11 @@
 package com.dcgabriel.mytodolist;
 
-import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.TimePicker;
-
-import java.util.Calendar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
@@ -25,15 +19,20 @@ public class EditTodoEntry extends AppCompatActivity {
     public static final String UPDATED_DESC = "updated_desc";
     public static final String UPDATED_TIME = "updated_time";
     public static final String UPDATED_DATE = "updated_date";
+    public static final String TODO_NOTIFICATION_ID = "todo_notification_id";
+    public static final String UPDATED_IS_COMPLETED = "updated_is_completed";
+
     private EditText editTodoEditText;
     private EditText editDescEditText;
     private TextView editTimeTextView;
     private TextView editDateTextView;
     private Bundle bundle;
     private String todoId;
-    private LiveData<TodoEntity> todo;
-    EditTodoViewModel todoViewModel;
+    private int todoNotificationId;
+    private int todoIsCompleted;
 
+    private LiveData<TodoEntity> todo;
+    private EditTodoViewModel todoViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +46,8 @@ public class EditTodoEntry extends AppCompatActivity {
         bundle = getIntent().getExtras();
         if (bundle != null) {
             todoId = bundle.getString("todo_id");
+            todoNotificationId = Integer.parseInt(bundle.getString("todo_notification_id"));
+            todoIsCompleted = Integer.parseInt(bundle.getString("todo_is_completed"));
         }
 
         todoViewModel = ViewModelProviders.of(this).get(EditTodoViewModel.class);
@@ -73,6 +74,9 @@ public class EditTodoEntry extends AppCompatActivity {
         resultIntent.putExtra(UPDATED_DESC, updatedDesc);
         resultIntent.putExtra(UPDATED_TIME, updatedTime);
         resultIntent.putExtra(UPDATED_DATE, updatedDate);
+        resultIntent.putExtra(TODO_NOTIFICATION_ID, todoNotificationId);
+        resultIntent.putExtra(UPDATED_IS_COMPLETED, 0); //todo change is completed  value
+
         setResult(RESULT_OK, resultIntent);
         finish();
     }
@@ -82,7 +86,7 @@ public class EditTodoEntry extends AppCompatActivity {
     }
 
     public void editTime(View view) {
-        MyCalendarDialog myCalendarDialog = new MyCalendarDialog(this,editTimeTextView);
+        MyCalendarDialog myCalendarDialog = new MyCalendarDialog(this, editTimeTextView);
         myCalendarDialog.timeDialog();
 
         Log.d(TAG, "newTime: ");

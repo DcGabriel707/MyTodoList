@@ -2,7 +2,12 @@ package com.dcgabriel.mytodolist;
 
 import android.app.Application;
 import android.os.AsyncTask;
+import android.os.SystemClock;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -37,6 +42,28 @@ public class TodoViewModel extends AndroidViewModel {
 
     public void delete(TodoEntity todo) {
         new DeleteAsyncTask(todoDAO).execute(todo);
+    }
+
+    public int generateNotificationId(){
+        int id = (int) SystemClock.uptimeMillis();
+        return id;
+    }
+
+    public long convertToTimeInMillisecond(String date, String time){
+        //Specifying the pattern of input date and time
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-M-yyyy hh:mm:ss");
+        String dateString = "22-03-2017 11:18:32";
+        Calendar calendar  = Calendar.getInstance();
+        try{
+            //formatting the dateString to convert it into a Date
+            Date mDate = sdf.parse(dateString);
+            calendar.setTime(mDate);
+        }catch(ParseException e){
+            e.printStackTrace();
+        }
+
+        return calendar.getTimeInMillis();
+
     }
 
     @Override
