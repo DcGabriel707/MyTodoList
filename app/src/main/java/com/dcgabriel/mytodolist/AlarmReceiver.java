@@ -22,7 +22,6 @@ public class AlarmReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         String todoTitle = intent.getStringExtra(MainActivity.TODO_TITLE);
         String todoDesc = intent.getStringExtra(MainActivity.TODO_DESC);
-        int todoIsComplete = intent.getIntExtra(MainActivity.TODO_IS_COMPLETE, 0);
         Intent myIntent = new Intent(context, AlarmReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, myIntent, PendingIntent.FLAG_ONE_SHOT);
 
@@ -50,17 +49,12 @@ public class AlarmReceiver extends BroadcastReceiver {
                 .setDefaults(Notification.DEFAULT_LIGHTS)
                 .setContentIntent(pendingIntent)
                 .setContentInfo("Info")
-
                 .build();
 
-        int id = generateID();
+        int id = 0;
         Log.d(TAG, "***********************onReceive: " + id);
         notificationManager.notify(id, notification);
     }
 
-    private int generateID(){
 
-        int id = (int) System.currentTimeMillis();
-        return id;
-    }
 }

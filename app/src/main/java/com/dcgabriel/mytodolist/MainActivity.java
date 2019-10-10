@@ -4,6 +4,8 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
@@ -44,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements TodoListAdapter.O
         setContentView(R.layout.activity_main);
 
         handleRecyclerView();
+        setUpNetworkUpdates();
     }
 
     private void handleRecyclerView() {
@@ -87,7 +90,6 @@ public class MainActivity extends AppCompatActivity implements TodoListAdapter.O
                     setNotification(todo);
 
             }
-
 
             todoViewModel.insert(todo);
             Toast.makeText(this, "saved successfully", Toast.LENGTH_SHORT).show();
@@ -144,10 +146,7 @@ public class MainActivity extends AppCompatActivity implements TodoListAdapter.O
     private void cancelNotification(TodoEntity todo) {
         Log.d(TAG, "000000000000000000000cancelNotification: title=" + todo.getTodo() + " description=" + todo.getDescription());
 
-        long scheduledDateTime = todoViewModel.convertToTimeInMillisecond(todo.getDate(), todo.getTime());
-
         AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-
         Intent myIntent = new Intent(MainActivity.this, AlarmReceiver.class);
         myIntent.putExtra(TODO_TITLE, todo.getTodo());
         myIntent.putExtra(TODO_DESC, todo.getDescription());
@@ -155,6 +154,17 @@ public class MainActivity extends AppCompatActivity implements TodoListAdapter.O
 
         pendingIntent.cancel();
         manager.cancel(pendingIntent);
+    }
+
+    private void setUpNetworkUpdates(){
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+
+        if (networkInfo != null && networkInfo.isConnected()) {
+            Toast.makeText(this, "Connected", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "not connected", Toast.LENGTH_SHORT).show();
+        }
     }
 
 
