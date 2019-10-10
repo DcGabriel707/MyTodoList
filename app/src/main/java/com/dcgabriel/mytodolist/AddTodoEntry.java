@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -32,6 +33,8 @@ public class AddTodoEntry extends AppCompatActivity {
     private TextView newTimeTextView;
     private TextView newDateTextView;
     private Switch isCompletedSwitch;
+    private LinearLayout addTimeLinearLayout;
+    private LinearLayout addDateLinearLayout;
 
     private Intent resultIntent = new Intent();
 
@@ -46,6 +49,8 @@ public class AddTodoEntry extends AppCompatActivity {
         newTimeTextView = findViewById(R.id.newTimeTextView);
         newDateTextView = findViewById(R.id.newDateTextView);
         isCompletedSwitch = findViewById(R.id.addIsCompletedSwitch);
+        addTimeLinearLayout = findViewById(R.id.addTimeLinearLayout);
+        addDateLinearLayout = findViewById(R.id.addDateLinearLayout);
         resultIntent = new Intent();
 
     }
@@ -58,9 +63,9 @@ public class AddTodoEntry extends AppCompatActivity {
             String desc = newDescEditText.getText().toString();
             String time = newTimeTextView.getText().toString();
             String date = newDateTextView.getText().toString();
-            if (time.equals("")) //todo: find more efficient way
+            if (time.equals("") || time.isEmpty()) //todo: find more efficient way
                 time = "00:00";
-            if (date.equals("")) //todo: find more efficient way
+            if (date.equals("")|| time.isEmpty()) //todo: find more efficient way
                 date = "00/00/00";
 
             resultIntent.putExtra(TODO_ADDED, todo);
@@ -89,10 +94,16 @@ public class AddTodoEntry extends AppCompatActivity {
     public void addIsComplete(View view) {
         if (isCompletedSwitch.isChecked()) {
             isComplete = 1;
+            addTimeLinearLayout.setVisibility(View.GONE);
+            addDateLinearLayout.setVisibility(View.GONE);
+            newTimeTextView.setText("00:00");
+            newDateTextView.setText("00/00/00");
             Toast.makeText(this, "Completed", Toast.LENGTH_SHORT).show();
         } else {
             isComplete = 0;
             Toast.makeText(this, "Not completed", Toast.LENGTH_SHORT).show();
+            addTimeLinearLayout.setVisibility(View.VISIBLE);
+            addDateLinearLayout.setVisibility(View.VISIBLE);
         }
     }
 

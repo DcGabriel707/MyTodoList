@@ -30,6 +30,8 @@ public class MainActivity extends AppCompatActivity implements TodoListAdapter.O
     public static final int EDIT_ENTRY_ACTIVITY_REQUEST_CODE = 2;
     public static final String TODO_TITLE = "todo_title";
     public static final String TODO_DESC = "todo_date";
+    public static final String TODO_IS_COMPLETE = "todo_is_complete";
+
     private int temp = 1;
 
     private TodoViewModel todoViewModel;
@@ -63,20 +65,31 @@ public class MainActivity extends AppCompatActivity implements TodoListAdapter.O
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+
         if (requestCode == ADD_ENTRY_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
 
             final String todo_id = UUID.randomUUID().toString();
+
             TodoEntity todo = new TodoEntity(todo_id,
                     data.getStringExtra(AddTodoEntry.TODO_ADDED),
                     data.getStringExtra(AddTodoEntry.DESC_ADDED),
                     data.getStringExtra(AddTodoEntry.TIME_ADDED),
                     data.getStringExtra(AddTodoEntry.DATE_ADDED),
                     todoViewModel.generateNotificationId(),
-                    data.getIntExtra(AddTodoEntry.IS_COMPLETE, -99));
+                    data.getIntExtra(AddTodoEntry.IS_COMPLETE, -999));
 
-            setNotification(todo);
+            if ((!data.getStringExtra(AddTodoEntry.TIME_ADDED).equals("00:00") && !data.getStringExtra(AddTodoEntry.DATE_ADDED).equals("00/00/00"))) {
+                Log.d(TAG, "onActivityResult: " + data.getIntExtra(AddTodoEntry.IS_COMPLETE, -999));
+                if (data.getIntExtra(AddTodoEntry.IS_COMPLETE, -999) == 1) {
+
+                    cancelNotification(todo);
+                } else
+                    setNotification(todo);
+
+            }
+
+
             todoViewModel.insert(todo);
-            Log.d(TAG, "****************************onActivityResult: " + todo.getId() + " " + todo.getTodo() + " " + todo.getDescription() + " " + todo.getDate() + " " + todo.getTodo());
             Toast.makeText(this, "saved successfully", Toast.LENGTH_SHORT).show();
         } else if (requestCode == EDIT_ENTRY_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
             TodoEntity todo = new TodoEntity(data.getStringExtra(EditTodoEntry.TODO_ID),
@@ -84,10 +97,16 @@ public class MainActivity extends AppCompatActivity implements TodoListAdapter.O
                     data.getStringExtra(EditTodoEntry.UPDATED_DESC),
                     data.getStringExtra(EditTodoEntry.UPDATED_TIME),
                     data.getStringExtra(EditTodoEntry.UPDATED_DATE),
-                    data.getIntExtra(EditTodoEntry.TODO_NOTIFICATION_ID,-999),
-                    data.getIntExtra(EditTodoEntry.UPDATED_IS_COMPLETED,-999)
-                    );
-            setNotification(todo);
+                    data.getIntExtra(EditTodoEntry.TODO_NOTIFICATION_ID, -999),
+                    data.getIntExtra(EditTodoEntry.UPDATED_IS_COMPLETED, -999)
+            );
+            Log.d(TAG, "onActivityResult: " + data.getIntExtra(EditTodoEntry.UPDATED_IS_COMPLETED, -999));
+            if (data.getIntExtra(EditTodoEntry.UPDATED_IS_COMPLETED, -999) == 1) {
+                cancelNotification(todo);
+            } else if (!data.getStringExtra(EditTodoEntry.UPDATED_TIME).equals("00:00") && !data.getStringExtra(EditTodoEntry.UPDATED_DATE).equals("00/00/00")) {
+                setNotification(todo);
+            }
+
             todoViewModel.update(todo);
             Toast.makeText(this, "updated successfully", Toast.LENGTH_SHORT).show();
         } else {
@@ -106,8 +125,8 @@ public class MainActivity extends AppCompatActivity implements TodoListAdapter.O
         todoViewModel.delete(todo);
     }
 
-    private void setNotification(TodoEntity todo){
-        Log.d(TAG, "000000000000000000000setNotification: title=" + todo.getTodo() + " description=" + todo.getDescription() );
+    private void setNotification(TodoEntity todo) {
+        Log.d(TAG, "000000000000000000000setNotification: title=" + todo.getTodo() + " description=" + todo.getDescription());
 
         long scheduledDateTime = todoViewModel.convertToTimeInMillisecond(todo.getDate(), todo.getTime());
 
@@ -116,12 +135,27 @@ public class MainActivity extends AppCompatActivity implements TodoListAdapter.O
         Intent myIntent = new Intent(MainActivity.this, AlarmReceiver.class);
         myIntent.putExtra(TODO_TITLE, todo.getTodo());
         myIntent.putExtra(TODO_DESC, todo.getDescription());
-        PendingIntent pendingIntent =  PendingIntent.getBroadcast(this,todo.getNotificationId(), myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        myIntent.putExtra(TODO_IS_COMPLETE, todo.getIsCompleted());
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, todo.getNotificationId(), myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        manager.set(AlarmManager.RTC, scheduledDateTime+5000, pendingIntent );
-
+        manager.set(AlarmManager.RTC, scheduledDateTime, pendingIntent);
     }
 
+    private void cancelNotification(TodoEntity todo) {
+        Log.d(TAG, "000000000000000000000cancelNotification: title=" + todo.getTodo() + " description=" + todo.getDescription());
+
+        long scheduledDateTime = todoViewModel.convertToTimeInMillisecond(todo.getDate(), todo.getTime());
+
+        AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+        Intent myIntent = new Intent(MainActivity.this, AlarmReceiver.class);
+        myIntent.putExtra(TODO_TITLE, todo.getTodo());
+        myIntent.putExtra(TODO_DESC, todo.getDescription());
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, todo.getNotificationId(), myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        pendingIntent.cancel();
+        manager.cancel(pendingIntent);
+    }
 
 
 }

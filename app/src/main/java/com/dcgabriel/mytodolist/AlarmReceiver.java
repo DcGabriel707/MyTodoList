@@ -22,6 +22,7 @@ public class AlarmReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         String todoTitle = intent.getStringExtra(MainActivity.TODO_TITLE);
         String todoDesc = intent.getStringExtra(MainActivity.TODO_DESC);
+        int todoIsComplete = intent.getIntExtra(MainActivity.TODO_IS_COMPLETE, 0);
         Intent myIntent = new Intent(context, AlarmReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, myIntent, PendingIntent.FLAG_ONE_SHOT);
 
@@ -29,6 +30,8 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         Log.d(TAG, "***********************************************************onReceive: " + todoTitle + " " + todoDesc);
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
+
+
         String NOTIFICATION_CHANNEL_ID = "101";
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel notificationChannel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, "My Notifications", NotificationManager.IMPORTANCE_HIGH);

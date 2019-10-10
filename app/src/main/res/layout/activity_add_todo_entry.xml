@@ -61,6 +61,7 @@
                     android:layout_height="wrap_content" />
             </com.google.android.material.textfield.TextInputLayout>
             <LinearLayout
+                android:id="@+id/addTimeLinearLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -93,6 +94,7 @@
 
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/addDateLinearLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"

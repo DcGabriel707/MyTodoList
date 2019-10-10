@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +30,8 @@ public class EditTodoEntry extends AppCompatActivity {
     private EditText editDescEditText;
     private TextView editTimeTextView;
     private TextView editDateTextView;
+    private LinearLayout addTimeLinearLayout;
+    private LinearLayout addDateLinearLayout;
     private Bundle bundle;
     private String todoId;
     private int todoNotificationId;
@@ -47,6 +50,8 @@ public class EditTodoEntry extends AppCompatActivity {
         editTimeTextView = findViewById(R.id.editTimeTextView);
         editDateTextView = findViewById(R.id.editDateTextView);
         isCompletedSwitch = findViewById(R.id.editIsCompletedSwitch);
+        addTimeLinearLayout = findViewById(R.id.addTimeLinearLayout);
+        addDateLinearLayout = findViewById(R.id.addDateLinearLayout);
         bundle = getIntent().getExtras();
         if (bundle != null) {
             todoId = bundle.getString("todo_id");
@@ -63,7 +68,10 @@ public class EditTodoEntry extends AppCompatActivity {
                 editDescEditText.setText(todoEntity.getDescription());
                 editTimeTextView.setText(todoEntity.getTime());
                 editDateTextView.setText(todoEntity.getDate());
-                isCompletedSwitch.setChecked(todoEntity.getIsCompleted() == 1);
+                if (todoEntity.getIsCompleted() == 1) {
+                    hideTimeDate();
+                    isCompletedSwitch.setChecked(true);
+                }
             }
         });
     }
@@ -73,6 +81,12 @@ public class EditTodoEntry extends AppCompatActivity {
         String updatedDesc = editDescEditText.getText().toString();
         String updatedTime = editTimeTextView.getText().toString();
         String updatedDate = editDateTextView.getText().toString();
+
+        if (updatedTime.equals("") || updatedTime.isEmpty()) //todo: find more efficient way
+            updatedTime = "00:00";
+        if (updatedDate.equals("") || updatedDate.isEmpty()) //todo: find more efficient way
+            updatedDate = "00/00/00";
+
         Intent resultIntent = new Intent();
         resultIntent.putExtra("todo_id", todoId);
         resultIntent.putExtra(UPDATED_TODO, updatedTodo);
@@ -105,11 +119,21 @@ public class EditTodoEntry extends AppCompatActivity {
     public void editIsCompleteSwitch(View view) {
         if (isCompletedSwitch.isChecked()) {
             isComplete = 1;
+            hideTimeDate();
             Toast.makeText(this, "Completed", Toast.LENGTH_SHORT).show();
         } else {
             isComplete = 0;
             Toast.makeText(this, "Not completed", Toast.LENGTH_SHORT).show();
+            addTimeLinearLayout.setVisibility(View.VISIBLE);
+            addDateLinearLayout.setVisibility(View.VISIBLE);
         }
+    }
+
+    public void hideTimeDate() {
+        addTimeLinearLayout.setVisibility(View.GONE);
+        addDateLinearLayout.setVisibility(View.GONE);
+        editTimeTextView.setText("00:00");
+        editDateTextView.setText("00/00/00");
     }
 
 }
