@@ -53,13 +53,14 @@ public class TodoViewModel extends AndroidViewModel {
 
     public long convertToTimeInMillisecond(String date, String time) {
         //Specifying the pattern of input date and time
-        SimpleDateFormat sdf = new SimpleDateFormat("MM/d/yyyy hh:mm");
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm");
         String dateString = date + " " + time;
         Calendar calendar = Calendar.getInstance();
 
         Log.d(TAG, "convertToTimeInMillisecond: " + dateString);
         Date mDate = null;
         try {
+            Log.d(TAG, "33333333333333333333333333333333333convertToTimeInMillisecond: " + dateString);
             mDate = sdf.parse(dateString);
         } catch (ParseException e) {
             e.printStackTrace();

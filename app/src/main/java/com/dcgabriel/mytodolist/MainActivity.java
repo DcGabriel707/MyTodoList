@@ -98,7 +98,6 @@ public class MainActivity extends AppCompatActivity implements TodoListAdapter.O
         }
     }
 
-
     public void addFAB(View view) {
         Intent intent = new Intent(MainActivity.this, AddTodoEntry.class);
         startActivityForResult(intent, ADD_ENTRY_ACTIVITY_REQUEST_CODE);
@@ -121,7 +120,6 @@ public class MainActivity extends AppCompatActivity implements TodoListAdapter.O
         myIntent.putExtra(TODO_TITLE, todo.getTodo());
         myIntent.putExtra(TODO_DESC, todo.getDescription());
         PendingIntent pendingIntent =  PendingIntent.getBroadcast(this,todo.getNotificationId(), myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
 
         manager.set(AlarmManager.RTC, scheduledDateTime+5000, pendingIntent );
 

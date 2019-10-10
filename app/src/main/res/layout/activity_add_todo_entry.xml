@@ -1,57 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.circularreveal.coordinatorlayout.CircularRevealCoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:gravity="center_horizontal"
+    android:orientation="vertical"
     tools:context=".AddTodoEntry">
 
-    <EditText
-        android:id="@+id/newTodoEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    <EditText
-        android:id="@+id/newDescEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-
-
     <androidx.cardview.widget.CardView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:onClick="newDate">
+        android:layout_margin="16dp"
 
-        <TextView
-            android:id="@+id/newDateTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:text="Select date" />
+        app:cardCornerRadius="12dp"
+        android:backgroundTint="@color/colorPrimary">
+        <LinearLayout
+            android:padding="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
 
+            <androidx.cardview.widget.CardView
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                app:cardCornerRadius="18dp"
+                android:backgroundTint="#7C4DFF"
+                android:layout_gravity="right">
+                <ImageView
+                    android:layout_gravity="center"
+                    android:layout_margin="4dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_check_white_24dp"
+                    />
+            </androidx.cardview.widget.CardView>
+            <EditText
+                android:id="@+id/newTodoEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="32sp"/>
+            <EditText
+                android:id="@+id/newDescEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_add_alert_black_24dp"
+                    />
+                <androidx.cardview.widget.CardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    app:cardCornerRadius="15dp"
+                    android:backgroundTint="#E65100"
+                    android:onClick="newTime">
+
+                    <TextView
+                        android:id="@+id/newTimeTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp"
+                        android:textColor="#fff"
+                        android:text="Select time" />
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    app:cardCornerRadius="15dp"
+                    android:backgroundTint="#E65100"
+                    android:onClick="newDate">
+
+                    <TextView
+                        android:id="@+id/newDateTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp"
+                        android:textColor="#fff"
+                        android:text="Select date" />
+
+                </androidx.cardview.widget.CardView>
+
+            </LinearLayout>
+
+        </LinearLayout>
     </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:onClick="newTime">
-
-        <TextView
-            android:id="@+id/newTimeTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:text="Select time" />
-
-    </androidx.cardview.widget.CardView>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="save"
-        android:text="@string/save" />
-
-</LinearLayout>
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_add_white_24dp"
+         />
+</com.google.android.material.circularreveal.coordinatorlayout.CircularRevealCoordinatorLayout>
