@@ -1,62 +1,150 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<com.google.android.material.circularreveal.coordinatorlayout.CircularRevealCoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:gravity="center_horizontal"
+    android:orientation="vertical"
     tools:context=".EditTodoEntry">
 
-    <EditText
-        android:id="@+id/editTodoEditText"
-        android:layout_width="80dp"
-        android:layout_height="wrap_content"
-        />
-    <EditText
-        android:id="@+id/editDescEditText"
-        android:layout_width="80dp"
-        android:layout_height="wrap_content"
-        />
     <androidx.cardview.widget.CardView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:onClick="editDate">
+        android:layout_margin="16dp"
+        app:cardElevation="8dp"
+        app:cardCornerRadius="24dp"
+        android:backgroundTint="@color/colorPrimary">
+    <LinearLayout
+        android:padding="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
 
-        <TextView
-            android:id="@+id/editDateTextView"
+        android:gravity="center_horizontal">
+
+
+        <Switch
+            android:id="@+id/editIsCompletedSwitch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:text="Select date" />
+            android:layout_marginBottom="10dp"
+            android:checked="false"
+            android:onClick="editIsCompleteSwitch"
+            android:textOff="Not complete"
+            android:textOn="Completed" />
 
+        <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_height="wrap_content"
+                android:hint="Title"
+                android:textColorHint="#fff"
+                android:layout_marginBottom="12dp"
+                android:layout_width="match_parent">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editTodoEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+android:textColor="@color/colorAccent"
+                    android:textSize="28sp"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_height="wrap_content"
+                android:hint="Description"
+                android:layout_marginBottom="12dp"
+                android:textColorHint="#fff"
+                android:layout_width="match_parent">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editDescEditText"
+                    android:textColor="@color/colorAccent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingLeft="16dp"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_alarm_add_white_24dp"
+                    android:layout_marginRight="14dp"/>
+                <com.google.android.material.button.MaterialButton
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    app:cardCornerRadius="17dp"
+                    android:text="Select time"
+                    app:strokeColor="#fff"
+                    android:stateListAnimator="@animator/anim_button_push"
+                    android:onClick="editTime"/>
+                <TextView
+                    android:id="@+id/editTimeTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:textColor="@color/colorAccent"
+                    android:layout_marginLeft="10dp"
+                    android:text="" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingLeft="16dp"
+                android:gravity="center_vertical">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="14dp"
+                    android:src="@drawable/ic_event_white_24dp"/>
+                <com.google.android.material.button.MaterialButton
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:onClick="editDate"
+                    android:text="Select date"
+
+                    app:cardCornerRadius="17dp"
+                    app:strokeColor="#fff" />
+                <TextView
+                    android:id="@+id/editDateTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="@color/colorAccent"
+                    android:text="" />
+
+
+
+
+            </LinearLayout>
+
+        </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:onClick="editTime">
-
-        <TextView
-            android:id="@+id/editTimeTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:text="Select time" />
-
-    </androidx.cardview.widget.CardView>
-    <Button
         android:onClick="updateTodo"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_check_white_24dp"/>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:layout_width="wrap_content"
-        android:text="@string/save"
-        android:layout_height="wrap_content"/>
-    <Button
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:layout_gravity="bottom|left"
         android:onClick="cancelUpdate"
-        android:layout_width="wrap_content"
-        android:text="@string/cancel"
-        android:layout_height="wrap_content"/>
-
-
-</LinearLayout>
+        android:src="@drawable/ic_close_black_24dp"/>
+</com.google.android.material.circularreveal.coordinatorlayout.CircularRevealCoordinatorLayout>

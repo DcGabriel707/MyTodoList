@@ -30,15 +30,11 @@ public class MainActivity extends AppCompatActivity implements TodoListAdapter.O
     public static final int EDIT_ENTRY_ACTIVITY_REQUEST_CODE = 2;
     public static final String TODO_TITLE = "todo_title";
     public static final String TODO_DESC = "todo_date";
-
     private int temp = 1;
-
 
     private TodoViewModel todoViewModel;
     private RecyclerView todoRecyclerView;
     private TodoListAdapter todoListAdapter;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements TodoListAdapter.O
                     data.getStringExtra(AddTodoEntry.TIME_ADDED),
                     data.getStringExtra(AddTodoEntry.DATE_ADDED),
                     todoViewModel.generateNotificationId(),
-                    0);
+                    data.getIntExtra(AddTodoEntry.IS_COMPLETE, -99));
 
             setNotification(todo);
             todoViewModel.insert(todo);
@@ -88,13 +84,14 @@ public class MainActivity extends AppCompatActivity implements TodoListAdapter.O
                     data.getStringExtra(EditTodoEntry.UPDATED_DESC),
                     data.getStringExtra(EditTodoEntry.UPDATED_TIME),
                     data.getStringExtra(EditTodoEntry.UPDATED_DATE),
-                    Integer.parseInt(data.getStringExtra(EditTodoEntry.TODO_NOTIFICATION_ID)),
-                    Integer.parseInt(data.getStringExtra(EditTodoEntry.UPDATED_IS_COMPLETED))
+                    data.getIntExtra(EditTodoEntry.TODO_NOTIFICATION_ID,-999),
+                    data.getIntExtra(EditTodoEntry.UPDATED_IS_COMPLETED,-999)
                     );
+            setNotification(todo);
             todoViewModel.update(todo);
-            Toast.makeText(this, "updated  successfully", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "updated successfully", Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(this, "save failed", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "not saved", Toast.LENGTH_SHORT).show();
         }
     }
 

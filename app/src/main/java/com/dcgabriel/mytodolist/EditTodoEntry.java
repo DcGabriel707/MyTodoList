@@ -5,7 +5,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
@@ -22,6 +24,7 @@ public class EditTodoEntry extends AppCompatActivity {
     public static final String TODO_NOTIFICATION_ID = "todo_notification_id";
     public static final String UPDATED_IS_COMPLETED = "updated_is_completed";
 
+    private Switch isCompletedSwitch;
     private EditText editTodoEditText;
     private EditText editDescEditText;
     private TextView editTimeTextView;
@@ -30,6 +33,7 @@ public class EditTodoEntry extends AppCompatActivity {
     private String todoId;
     private int todoNotificationId;
     private int todoIsCompleted;
+    private int isComplete;
 
     private LiveData<TodoEntity> todo;
     private EditTodoViewModel todoViewModel;
@@ -42,7 +46,7 @@ public class EditTodoEntry extends AppCompatActivity {
         editDescEditText = findViewById(R.id.editDescEditText);
         editTimeTextView = findViewById(R.id.editTimeTextView);
         editDateTextView = findViewById(R.id.editDateTextView);
-
+        isCompletedSwitch = findViewById(R.id.editIsCompletedSwitch);
         bundle = getIntent().getExtras();
         if (bundle != null) {
             todoId = bundle.getString("todo_id");
@@ -59,6 +63,7 @@ public class EditTodoEntry extends AppCompatActivity {
                 editDescEditText.setText(todoEntity.getDescription());
                 editTimeTextView.setText(todoEntity.getTime());
                 editDateTextView.setText(todoEntity.getDate());
+                isCompletedSwitch.setChecked(todoEntity.getIsCompleted() == 1);
             }
         });
     }
@@ -75,7 +80,7 @@ public class EditTodoEntry extends AppCompatActivity {
         resultIntent.putExtra(UPDATED_TIME, updatedTime);
         resultIntent.putExtra(UPDATED_DATE, updatedDate);
         resultIntent.putExtra(TODO_NOTIFICATION_ID, todoNotificationId);
-        resultIntent.putExtra(UPDATED_IS_COMPLETED, 0); //todo change is completed  value
+        resultIntent.putExtra(UPDATED_IS_COMPLETED, isComplete); //todo change is completed  value
 
         setResult(RESULT_OK, resultIntent);
         finish();
@@ -95,6 +100,16 @@ public class EditTodoEntry extends AppCompatActivity {
     public void editDate(View view) {
         MyCalendarDialog myCalendarDialog = new MyCalendarDialog(this, editDateTextView);
         myCalendarDialog.dateDialog();
+    }
+
+    public void editIsCompleteSwitch(View view) {
+        if (isCompletedSwitch.isChecked()) {
+            isComplete = 1;
+            Toast.makeText(this, "Completed", Toast.LENGTH_SHORT).show();
+        } else {
+            isComplete = 0;
+            Toast.makeText(this, "Not completed", Toast.LENGTH_SHORT).show();
+        }
     }
 
 }

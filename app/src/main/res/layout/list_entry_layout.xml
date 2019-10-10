@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+
     xmlns:app="http://schemas.android.com/apk/res-auto"
+
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginLeft="16dp"
@@ -9,13 +11,18 @@
     android:layout_marginRight="16dp"
     android:layout_marginBottom="8dp"
     android:backgroundTint="#FFD600"
-    app:cardCornerRadius="8dp">
+
+
+    android:stateListAnimator="@animator/anim_button_push"
+    app:cardElevation="8dp"
+    app:cardCornerRadius="16dp">
 
     <RelativeLayout
+        android:foreground="?android:attr/selectableItemBackground"
         android:id="@+id/todoEntryRelativeLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:clickable="true"
+
         android:padding="16dp">
 
 
@@ -25,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:textSize="18sp"
+            android:textSize="20sp"
             android:layout_marginBottom="4dp"
             android:layout_toStartOf="@+id/todoEntryDelete"
             android:textColor="#494949" />
@@ -44,8 +51,13 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_alignParentRight="true"
-            android:backgroundTint="#A0A0A0"
-            app:cardCornerRadius="20dp">
+            android:backgroundTint="#024BF0"
+            app:cardCornerRadius="20dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:stateListAnimator="@animator/anim_button_push"
+
+            app:cardElevation="3dp">
 
             <ImageView
                 android:layout_width="wrap_content"

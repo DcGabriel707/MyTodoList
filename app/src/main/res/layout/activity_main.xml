@@ -24,6 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"
         android:layout_margin="16dp"
+        android:stateListAnimator="@animator/anim_button_push"
         android:onClick="addFAB"
         app:srcCompat="@drawable/ic_note_add_white_24dp" />
 
