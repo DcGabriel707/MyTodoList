@@ -42,27 +42,33 @@ public class TodoViewModel extends AndroidViewModel {
         allTodos = todoDAO.getAllTodos();
     }
 
+    //inserts data into database
     public void insert(TodoEntity todo) {
         new InsertAsyncTask(todoDAO).execute(todo);
     }
 
+    //gets all todo items
     LiveData<List<TodoEntity>> getAllTodos() {
         return allTodos;
     }
 
+    //updates the database
     public void update(TodoEntity todo) {
         new UpdateAsyncTask(todoDAO).execute(todo);
     }
 
+    //deletes the database
     public void delete(TodoEntity todo) {
         new DeleteAsyncTask(todoDAO).execute(todo);
     }
 
+    //generates a unique notification id
     public int generateNotificationId() {
         int id = (int) SystemClock.uptimeMillis();
         return id;
     }
 
+    //converts date/time to millisecond
     public long convertToTimeInMillisecond(String date, String time) {
         //Specifying the pattern of input date and time
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm");
@@ -84,6 +90,7 @@ public class TodoViewModel extends AndroidViewModel {
 
     }
 
+    //save into cache
     public void saveCache(Context context, TodoEntity todo) {
         Gson gson = new Gson();
         ArrayList<TodoEntity> todoList = new ArrayList<>();
@@ -104,6 +111,7 @@ public class TodoViewModel extends AndroidViewModel {
     }
 
 
+    //retrieves data from cache
     private String retrieveCache(Context context) {
         String fileContent = "";
         try {

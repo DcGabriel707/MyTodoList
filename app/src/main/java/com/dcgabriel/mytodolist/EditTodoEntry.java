@@ -68,11 +68,13 @@ public class EditTodoEntry extends AppCompatActivity {
             todoIsCompleted = bundle.getInt("todo_is_completed");
         }
 
+
         todoViewModel = ViewModelProviders.of(this).get(EditTodoViewModel.class);
         todo = todoViewModel.getTodo(todoId);
         todo.observe(this, new Observer<TodoEntity>() {
             @Override
             public void onChanged(TodoEntity todoEntity) {
+                //update views
                 editTodoEditText.setText(todoEntity.getTodo());
                 editDescEditText.setText(todoEntity.getDescription());
                 editTimeTextView.setText(todoEntity.getTime());
@@ -85,7 +87,9 @@ public class EditTodoEntry extends AppCompatActivity {
         });
     }
 
+    //when update is complete, send input data back to MainActivity
     public void updateTodo(View view) {
+
         String updatedTodo = editTodoEditText.getText().toString();
         String updatedDesc = editDescEditText.getText().toString();
         String updatedTime = editTimeTextView.getText().toString();
@@ -109,10 +113,12 @@ public class EditTodoEntry extends AppCompatActivity {
         finish();
     }
 
+
     public void cancelUpdate(View v) {
         finish();
     }
 
+    //opens the time dialog box
     public void editTime(View view) {
         MyCalendarDialog myCalendarDialog = new MyCalendarDialog(this, editTimeTextView);
         myCalendarDialog.timeDialog();
@@ -120,16 +126,19 @@ public class EditTodoEntry extends AppCompatActivity {
         Log.d(TAG, "newTime: ");
     }
 
+    //opens the date dialog box
     public void editDate(View view) {
         MyCalendarDialog myCalendarDialog = new MyCalendarDialog(this, editDateTextView);
         myCalendarDialog.dateDialog();
     }
 
+    //when toggle switch is on, hide/unhide views for ux/ui
     public void editIsCompleteSwitch(View view) {
         if (isCompletedSwitch.isChecked()) {
             isComplete = 1;
             editNotCompleteTextView.setVisibility(View.GONE);
             editCompleteTextView.setVisibility(View.VISIBLE);
+            editCloseDateTime.setVisibility(View.GONE);
             hideTimeDate();
             Toast.makeText(this, "Completed", Toast.LENGTH_SHORT).show();
         } else {
@@ -142,6 +151,7 @@ public class EditTodoEntry extends AppCompatActivity {
         }
     }
 
+    //hides the time/date views for ux
     public void hideTimeDate() {
         addTimeLinearLayout.setVisibility(View.GONE);
         addDateLinearLayout.setVisibility(View.GONE);
@@ -149,6 +159,7 @@ public class EditTodoEntry extends AppCompatActivity {
         editDateTextView.setText("00/00/00");
     }
 
+    //resets the data/time for ux
     public void editCloseDateTimeClick(View view) {
         editTimeTextView.setText("00:00");
         editDateTextView.setText("00/00/00");

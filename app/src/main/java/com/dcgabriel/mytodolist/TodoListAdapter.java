@@ -27,6 +27,7 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.TodoVi
         void onDeleteClickListener(TodoEntity todo);
     }
 
+    //inflates the layout
     public TodoListAdapter(Context mainActivityContext, OnDeleteClickListener onDeleteClickListener) {
         layoutInflater = LayoutInflater.from(mainActivityContext);
         context = mainActivityContext;
@@ -35,6 +36,7 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.TodoVi
 
     @NonNull
     @Override
+    //inflates the veiw in each entry
     public TodoListAdapter.TodoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = layoutInflater.inflate(R.layout.list_entry_layout, parent, false);
         TodoViewHolder viewHolder = new TodoViewHolder(itemView);
@@ -61,6 +63,7 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.TodoVi
             return 0;
     }
 
+    //sets
     public void setNotes(List<TodoEntity> todos) {
         this.todoList = todos;
         notifyDataSetChanged();
@@ -81,11 +84,14 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.TodoVi
             updateEntry  = itemView.findViewById(R.id.todoEntryRelativeLayout);
         }
 
+        //sets the data in each entry
         public void setData(String text, String desc, int position) {
             todoEntryTextView.setText(text);
             todoEntryDescTextView.setText(desc);
             this.position = position;
         }
+
+        //sets the listeners
         public void setListeners(){
             updateEntry.setOnClickListener(new View.OnClickListener() {
                 @Override

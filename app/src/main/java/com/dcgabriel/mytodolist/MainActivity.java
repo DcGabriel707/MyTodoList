@@ -59,14 +59,16 @@ public class MainActivity extends AppCompatActivity implements TodoListAdapter.O
 
     private void handleRecyclerView() {
         todoRecyclerView = findViewById(R.id.todoRecyclerView);
-        todoListAdapter = new TodoListAdapter(MainActivity.this, this);
-        todoRecyclerView.setAdapter(todoListAdapter);
+
+        todoListAdapter = new TodoListAdapter(MainActivity.this, this); //initialize list adapter
+        todoRecyclerView.setAdapter(todoListAdapter); //set adapter to recyclerview
         todoRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        todoViewModel = ViewModelProviders.of(this).get(TodoViewModel.class);
+
+        todoViewModel = ViewModelProviders.of(this).get(TodoViewModel.class); //set viewmodel
         todoViewModel.getAllTodos().observe(this, new Observer<List<TodoEntity>>() {
             @Override
-            public void onChanged(List<TodoEntity> todoEntities) {
+            public void onChanged(List<TodoEntity> todoEntities) { //gets all the todo entries and populates the list
                 todoListAdapter.setNotes(todoEntities);
             }
         });
@@ -75,9 +77,12 @@ public class MainActivity extends AppCompatActivity implements TodoListAdapter.O
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == ADD_ENTRY_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
-            final String todo_id = UUID.randomUUID().toString();
 
+        //when the addEntryActivity finishes successfully
+        if (requestCode == ADD_ENTRY_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
+            final String todo_id = UUID.randomUUID().toString(); //generate unique if for each entry
+
+            //creates a todoEntity object using the data from addEntryActivity
             TodoEntity todo = new TodoEntity(todo_id,
                     data.getStringExtra(AddTodoEntry.TODO_ADDED),
                     data.getStringExtra(AddTodoEntry.DESC_ADDED),
@@ -86,18 +91,22 @@ public class MainActivity extends AppCompatActivity implements TodoListAdapter.O
                     todoViewModel.generateNotificationId(),
                     data.getIntExtra(AddTodoEntry.IS_COMPLETE, -999));
 
+            //if the user set a due date
             if ((!data.getStringExtra(AddTodoEntry.TIME_ADDED).equals("00:00") && !data.getStringExtra(AddTodoEntry.DATE_ADDED).equals("00/00/00"))) {
                 Log.d(TAG, "onActivityResult: " + data.getIntExtra(AddTodoEntry.IS_COMPLETE, -999));
+
+                //if the user set the todo item as done/completed
                 if (data.getIntExtra(AddTodoEntry.IS_COMPLETE, -999) == 1) {
-                    cancelNotification(todo);
+                    cancelNotification(todo); //cancel the notification be
                     Toast.makeText(this, "Notification canceled", Toast.LENGTH_SHORT).show();
                 } else
                     setNotification(todo);
             }
-            todoViewModel.saveCache(MainActivity.this, todo);
-            todoViewModel.insert(todo);
+            todoViewModel.saveCache(MainActivity.this, todo); //saves the inserted todoObject into cache
+            todoViewModel.insert(todo); //inserts the new todoObject
             Toast.makeText(this, "saved successfully", Toast.LENGTH_SHORT).show();
-        } else if (requestCode == EDIT_ENTRY_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
+
+        } else if (requestCode == EDIT_ENTRY_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) { //when the editEntryActivity finishes
             TodoEntity todo = new TodoEntity(data.getStringExtra(EditTodoEntry.TODO_ID),
                     data.getStringExtra(EditTodoEntry.UPDATED_TODO),
                     data.getStringExtra(EditTodoEntry.UPDATED_DESC),
@@ -107,13 +116,17 @@ public class MainActivity extends AppCompatActivity implements TodoListAdapter.O
                     data.getIntExtra(EditTodoEntry.UPDATED_IS_COMPLETED, -999)
             );
             Log.d(TAG, "onActivityResult: " + data.getIntExtra(EditTodoEntry.UPDATED_IS_COMPLETED, -999));
+            //if the the user set the entry as done/completed, cancel the notification
             if (data.getIntExtra(EditTodoEntry.UPDATED_IS_COMPLETED, -999) == 1) {
                 cancelNotification(todo);
-            } else if (!data.getStringExtra(EditTodoEntry.UPDATED_TIME).equals("00:00") && !data.getStringExtra(EditTodoEntry.UPDATED_DATE).equals("00/00/00")) {
+            }
+            //when the user updates the due date, update the notification
+            else if (!data.getStringExtra(EditTodoEntry.UPDATED_TIME).equals("00:00") && !data.getStringExtra(EditTodoEntry.UPDATED_DATE).equals("00/00/00")) {
                 setNotification(todo);
             } else //todo: fix if logic
                 cancelNotification(todo);
 
+            //update the database
             todoViewModel.update(todo);
             Toast.makeText(this, "updated successfully", Toast.LENGTH_SHORT).show();
         } else {
@@ -124,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements TodoListAdapter.O
     @Override
     protected void onPause() {
         super.onPause();
-        unregisterReceiver(networkReceiver);
+        unregisterReceiver(networkReceiver); // pauses the networkReceiver so
     }
 
     @Override
@@ -134,9 +147,9 @@ public class MainActivity extends AppCompatActivity implements TodoListAdapter.O
     }
 
     public void addFAB(View view) {
+        //starts the AddTodoEntry activity.
         Intent intent = new Intent(MainActivity.this, AddTodoEntry.class);
         startActivityForResult(intent, ADD_ENTRY_ACTIVITY_REQUEST_CODE);
-
     }
 
     @Override

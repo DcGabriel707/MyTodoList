@@ -20,7 +20,5 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
         } else {
             Toast.makeText(context, "No internet", Toast.LENGTH_SHORT).show();
         }
-
-
     }
 }

@@ -41,7 +41,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         }
 
         Notification notification = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
-                .setContentTitle("Reminder: " + todoTitle)
+                .setContentTitle("Todo Reminder: " + todoTitle)
                 .setContentText(todoDesc)
                 .setAutoCancel(true)
                 .setWhen(System.currentTimeMillis())

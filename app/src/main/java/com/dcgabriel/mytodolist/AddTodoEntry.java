@@ -68,6 +68,7 @@ public class AddTodoEntry extends AppCompatActivity {
         if (TextUtils.isEmpty(newTodoEditText.getText())) {
             Toast.makeText(this, "Enter todo title", Toast.LENGTH_SHORT).show();
         } else {
+            //gets the input
             String todo = newTodoEditText.getText().toString();
             String desc = newDescEditText.getText().toString();
             String time = newTimeTextView.getText().toString();
@@ -77,6 +78,7 @@ public class AddTodoEntry extends AppCompatActivity {
             if (date.equals("")|| time.isEmpty()) //todo: find more efficient way
                 date = "00/00/00";
 
+            //sends the input back to MainActivity
             resultIntent.putExtra(TODO_ADDED, todo);
             resultIntent.putExtra(DESC_ADDED, desc);
             resultIntent.putExtra(TIME_ADDED, time);
@@ -89,6 +91,7 @@ public class AddTodoEntry extends AppCompatActivity {
     }
 
     public void newTime(View view) {
+        //opens the time dialog box
         MyCalendarDialog myCalendarDialog = new MyCalendarDialog(this, newTimeTextView);
         myCalendarDialog.timeDialog();
 
@@ -96,11 +99,13 @@ public class AddTodoEntry extends AppCompatActivity {
     }
 
     public void newDate(View view) {
+        //opens the date dialog box
         MyCalendarDialog myCalendarDialog = new MyCalendarDialog(this, newDateTextView);
         myCalendarDialog.dateDialog();
     }
 
     public void addIsComplete(View view) {
+        //if the switch toggle is on, hide views. for UX/UI
         if (isCompletedSwitch.isChecked()) {
             isComplete = 1;
             addTimeLinearLayout.setVisibility(View.GONE);
@@ -121,6 +126,7 @@ public class AddTodoEntry extends AppCompatActivity {
         }
     }
 
+    //when the close button is clicked, reset date/time
     public void addCloseDateTime(View view) {
         newTimeTextView.setText("00:00");
         newDateTextView.setText("00/00/00");
