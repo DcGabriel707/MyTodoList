@@ -2,8 +2,10 @@ package com.dcgabriel.mytodolist;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -14,6 +16,11 @@ import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
 import java.sql.Time;
 import java.util.Calendar;
 import java.util.Date;
@@ -39,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements TodoListAdapter.O
     private TodoViewModel todoViewModel;
     private RecyclerView todoRecyclerView;
     private TodoListAdapter todoListAdapter;
+    private BroadcastReceiver networkReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,10 +75,7 @@ public class MainActivity extends AppCompatActivity implements TodoListAdapter.O
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-
         if (requestCode == ADD_ENTRY_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
-
             final String todo_id = UUID.randomUUID().toString();
 
             TodoEntity todo = new TodoEntity(todo_id,
@@ -90,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements TodoListAdapter.O
                     setNotification(todo);
 
             }
-
+            todoViewModel.saveCache(MainActivity.this, todo);
             todoViewModel.insert(todo);
             Toast.makeText(this, "saved successfully", Toast.LENGTH_SHORT).show();
         } else if (requestCode == EDIT_ENTRY_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
@@ -116,11 +121,23 @@ public class MainActivity extends AppCompatActivity implements TodoListAdapter.O
         }
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(networkReceiver);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setUpNetworkUpdates();
+    }
+
     public void addFAB(View view) {
         Intent intent = new Intent(MainActivity.this, AddTodoEntry.class);
         startActivityForResult(intent, ADD_ENTRY_ACTIVITY_REQUEST_CODE);
-    }
 
+    }
 
     @Override
     public void onDeleteClickListener(TodoEntity todo) {
@@ -157,15 +174,10 @@ public class MainActivity extends AppCompatActivity implements TodoListAdapter.O
     }
 
     private void setUpNetworkUpdates(){
-        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-
-        if (networkInfo != null && networkInfo.isConnected()) {
-            Toast.makeText(this, "Connected", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(this, "not connected", Toast.LENGTH_SHORT).show();
-        }
+        networkReceiver = new NetworkChangeReceiver();
+        registerReceiver(networkReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
     }
+
 
 
 }

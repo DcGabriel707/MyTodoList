@@ -1,12 +1,25 @@
 package com.dcgabriel.mytodolist;
 
 import android.app.Application;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.SystemClock;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -70,6 +83,48 @@ public class TodoViewModel extends AndroidViewModel {
         Log.d(TAG, "convertToTimeInMillisecond: " + date + " " + time + calendar.getTimeInMillis());
         return calendar.getTimeInMillis();
 
+    }
+
+    public void saveCache(Context context, TodoEntity todo) {
+        Gson gson = new Gson();
+        ArrayList<TodoEntity> todoList = new ArrayList<>();
+        todoList.add(todo);
+
+        String testJson = gson.toJson(todoList);
+        Log.d(TAG, "-----------saveMyData: " + testJson);
+        try {
+            ObjectOutput out = new ObjectOutputStream(new FileOutputStream(new File(context.getCacheDir(), "") + "cachefile.txt"));
+            out.writeObject(testJson);
+
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        retrieveCache(context);
+    }
+
+
+    private String retrieveCache(Context context) {
+        String fileContent = "";
+        try {
+            String currentLine;
+            BufferedReader bufferedReader;
+            FileInputStream fileInputStream = new FileInputStream(context.getCacheDir() + "cachefile.txt");
+            bufferedReader = new BufferedReader(new InputStreamReader(fileInputStream, "UTF-8"));
+
+            while ((currentLine = bufferedReader.readLine()) != null) {
+                fileContent += currentLine + '\n';
+            }
+
+            bufferedReader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+
+            fileContent = null;
+        }
+        Log.d(TAG, "-----------saveMyData: " +  fileContent);
+        return fileContent;
     }
 
     @Override
