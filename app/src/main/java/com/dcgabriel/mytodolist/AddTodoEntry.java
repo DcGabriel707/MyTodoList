@@ -1,6 +1,7 @@
 package com.dcgabriel.mytodolist;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -35,6 +36,9 @@ public class AddTodoEntry extends AppCompatActivity {
     private Switch isCompletedSwitch;
     private LinearLayout addTimeLinearLayout;
     private LinearLayout addDateLinearLayout;
+    private TextView addNotCompleteTextView;
+    private TextView addCompleteTextView;
+    private CardView addCloseDateText;
 
     private Intent resultIntent = new Intent();
 
@@ -51,8 +55,13 @@ public class AddTodoEntry extends AppCompatActivity {
         isCompletedSwitch = findViewById(R.id.addIsCompletedSwitch);
         addTimeLinearLayout = findViewById(R.id.addTimeLinearLayout);
         addDateLinearLayout = findViewById(R.id.addDateLinearLayout);
-        resultIntent = new Intent();
+        addNotCompleteTextView = findViewById(R.id.addNotCompleteTextView);
+        addCompleteTextView = findViewById(R.id.addCompleteTextView);
+        addCloseDateText = findViewById(R.id.addCloseTimeDate);
 
+        addCompleteTextView.setVisibility(View.INVISIBLE);
+
+        resultIntent = new Intent();
     }
 
     public void save(View v) {
@@ -96,17 +105,25 @@ public class AddTodoEntry extends AppCompatActivity {
             isComplete = 1;
             addTimeLinearLayout.setVisibility(View.GONE);
             addDateLinearLayout.setVisibility(View.GONE);
+            addNotCompleteTextView.setVisibility(View.GONE);
+            addCompleteTextView.setVisibility(View.VISIBLE);
+            addDateLinearLayout.setVisibility(View.GONE);
+            addCloseDateText.setVisibility(View.GONE);
             newTimeTextView.setText("00:00");
             newDateTextView.setText("00/00/00");
-            Toast.makeText(this, "Completed", Toast.LENGTH_SHORT).show();
         } else {
             isComplete = 0;
-            Toast.makeText(this, "Not completed", Toast.LENGTH_SHORT).show();
             addTimeLinearLayout.setVisibility(View.VISIBLE);
             addDateLinearLayout.setVisibility(View.VISIBLE);
+            addNotCompleteTextView.setVisibility(View.VISIBLE);
+            addCompleteTextView.setVisibility(View.GONE);
+            addCloseDateText.setVisibility(View.VISIBLE);
         }
     }
 
-
+    public void addCloseDateTime(View view) {
+        newTimeTextView.setText("00:00");
+        newDateTextView.setText("00/00/00");
+    }
 
 }

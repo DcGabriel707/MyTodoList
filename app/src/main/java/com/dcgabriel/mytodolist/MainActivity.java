@@ -89,11 +89,10 @@ public class MainActivity extends AppCompatActivity implements TodoListAdapter.O
             if ((!data.getStringExtra(AddTodoEntry.TIME_ADDED).equals("00:00") && !data.getStringExtra(AddTodoEntry.DATE_ADDED).equals("00/00/00"))) {
                 Log.d(TAG, "onActivityResult: " + data.getIntExtra(AddTodoEntry.IS_COMPLETE, -999));
                 if (data.getIntExtra(AddTodoEntry.IS_COMPLETE, -999) == 1) {
-
                     cancelNotification(todo);
+                    Toast.makeText(this, "Notification canceled", Toast.LENGTH_SHORT).show();
                 } else
                     setNotification(todo);
-
             }
             todoViewModel.saveCache(MainActivity.this, todo);
             todoViewModel.insert(todo);
@@ -112,7 +111,8 @@ public class MainActivity extends AppCompatActivity implements TodoListAdapter.O
                 cancelNotification(todo);
             } else if (!data.getStringExtra(EditTodoEntry.UPDATED_TIME).equals("00:00") && !data.getStringExtra(EditTodoEntry.UPDATED_DATE).equals("00/00/00")) {
                 setNotification(todo);
-            }
+            } else //todo: fix if logic
+                cancelNotification(todo);
 
             todoViewModel.update(todo);
             Toast.makeText(this, "updated successfully", Toast.LENGTH_SHORT).show();

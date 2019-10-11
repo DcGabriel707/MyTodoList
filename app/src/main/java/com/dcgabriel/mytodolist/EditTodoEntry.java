@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -30,8 +31,11 @@ public class EditTodoEntry extends AppCompatActivity {
     private EditText editDescEditText;
     private TextView editTimeTextView;
     private TextView editDateTextView;
+    private TextView editNotCompleteTextView;
+    private TextView editCompleteTextView;
     private LinearLayout addTimeLinearLayout;
     private LinearLayout addDateLinearLayout;
+    private CardView editCloseDateTime;
     private Bundle bundle;
     private String todoId;
     private int todoNotificationId;
@@ -52,6 +56,11 @@ public class EditTodoEntry extends AppCompatActivity {
         isCompletedSwitch = findViewById(R.id.editIsCompletedSwitch);
         addTimeLinearLayout = findViewById(R.id.addTimeLinearLayout);
         addDateLinearLayout = findViewById(R.id.addDateLinearLayout);
+        editNotCompleteTextView = findViewById(R.id.editNotCompleteTextView);
+        editCompleteTextView = findViewById(R.id.editCompleteTextView);
+        editCloseDateTime = findViewById(R.id.editCloseTimeDate);
+        editCompleteTextView.setVisibility(View.GONE);
+
         bundle = getIntent().getExtras();
         if (bundle != null) {
             todoId = bundle.getString("todo_id");
@@ -119,6 +128,8 @@ public class EditTodoEntry extends AppCompatActivity {
     public void editIsCompleteSwitch(View view) {
         if (isCompletedSwitch.isChecked()) {
             isComplete = 1;
+            editNotCompleteTextView.setVisibility(View.GONE);
+            editCompleteTextView.setVisibility(View.VISIBLE);
             hideTimeDate();
             Toast.makeText(this, "Completed", Toast.LENGTH_SHORT).show();
         } else {
@@ -126,6 +137,8 @@ public class EditTodoEntry extends AppCompatActivity {
             Toast.makeText(this, "Not completed", Toast.LENGTH_SHORT).show();
             addTimeLinearLayout.setVisibility(View.VISIBLE);
             addDateLinearLayout.setVisibility(View.VISIBLE);
+            editNotCompleteTextView.setVisibility(View.VISIBLE);
+            editCompleteTextView.setVisibility(View.GONE);
         }
     }
 
@@ -136,4 +149,8 @@ public class EditTodoEntry extends AppCompatActivity {
         editDateTextView.setText("00/00/00");
     }
 
+    public void editCloseDateTimeClick(View view) {
+        editTimeTextView.setText("00:00");
+        editDateTextView.setText("00/00/00");
+    }
 }

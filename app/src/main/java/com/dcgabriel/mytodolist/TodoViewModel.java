@@ -37,7 +37,6 @@ public class TodoViewModel extends AndroidViewModel {
     public TodoViewModel(@NonNull Application application) {
         super(application);
 
-
         todoDatabase = TodoDatabase.getDatabase(application);
         todoDAO = todoDatabase.todoDao();
         allTodos = todoDAO.getAllTodos();
